@@ -1,16 +1,16 @@
-const Todo = require("./models/todoModel")
+const Todo = require("./models/todoModel");
+
 
 exports.createTodo = async (req, res) => {
     try {
-        const newTodo = await Todo.findOne({ title: req.body.title })
-        if (newTodo) {
-            return res.status(400).json({
-                status: false,
-                message: "todo already exists"
-            })
-        }
+        // const newTodo = await Todo.findOne({ title: req.body.title })
+        // if (newTodo) {
+        //    return res.status(200).json("todo already exists")
+        // }
 
-        const todoSave = new Todo(req.body)
+       const { title, description } = req.body;
+
+        const todoSave = await Todo.create({ title, description })
         await todoSave.save();
         return res.status(201).json({
             status: true,
@@ -19,6 +19,7 @@ exports.createTodo = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error)
         return res.status(400).json({ error })
     }
 }
